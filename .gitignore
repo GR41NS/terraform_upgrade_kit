@@ -1,0 +1,6 @@
+**/.terraform.d
+**/terraform.tfstate.d
+**/.terraform
+**/*.tf
+**/*.tfvars
+**/tfsrc
