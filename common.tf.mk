@@ -1,5 +1,5 @@
-ifndef $(ENVIRONMENT)
-ENVIRONMENT := staging
+ifeq ($(ENVIRONMENT),)
+$(error ENVRIONMENT must be set, e.g. `ENVIRONMENT=staging make plan`)
 endif
 
 ifeq (, $(TF_VERSION))
@@ -10,7 +10,7 @@ export TF_PLUGIN_CACHE_DIR = $(shell git rev-parse --show-toplevel)/.terraform.d
 
 # Configuration Overrides
 REGION      ?= us-west-2
-TFVARS_FILE ?= staging.tfvars
+TFVARS_FILE ?= $(ENVIRONMENT).tfvars
 
 # Constants
 TERRAFORM_CMD := cd tfsrc && terraform
@@ -49,6 +49,7 @@ ifeq ($(TFVARS_FILE),)
 		-var 'environment=$(ENVIRONMENT)' \
 		-out terraform.plan
 else
+	echo $(TFVARS_FILE)
 	@$(TERRAFORM_CMD) plan \
 		-var 'environment=$(ENVIRONMENT)' \
 		-var-file="$(TFVARS_FILE)" \

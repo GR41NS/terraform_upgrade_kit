@@ -1,5 +1,4 @@
 TF_VERSION  := 0.13.7
-TFVARS_FILE ?= $(EMVIRONMENT).tfvars
 
 include $(shell git rev-parse --show-toplevel)/common.docker.mk
 include $(shell git rev-parse --show-toplevel)/common.tf.mk

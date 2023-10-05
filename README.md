@@ -8,9 +8,9 @@ Terraform is great. It works...
 
 This repo is for anyone who has neglected to upgrade their Terraform and provider plugin versions. In the case of TF 0.11.X, they've never provided ARM64 compatibility, meaning ARM-based Mac's are out of luck.
 
-To which you might say, "containerize it, then!"
+Containerization is a great workaround, and has, in our case, helped us maintain version freezes for many years (0.11 is 5 years old at the time of this writing).  However, older versions don't work, even in a container, and even under emulation, on newer MacOS versions.
 
-...except 0.11.X won't even run with x86 emulation MacOS 12.X Monterey+
+So, follow along below to get your Terraform states updated, major version by major version, to the newest and shiniest Terraform yet.
 
 ## Requirements
 
@@ -23,14 +23,20 @@ To which you might say, "containerize it, then!"
 
 ## Configuration Parameters and Defaults
 
+These variables can be passed in during Terraform execution, e.g.:
+`REGION=us-west-2 TFVARS_FILE=foo.tfvars make init`
+
+- `ENVIRONMENT ?= staging`
+  - The Terraform `env` value
+
 - `REGION ?= us-west-2`
   - Cloud region (applicable to AWS, others)
 
-- `TFVARS_FILE ?= staging.tfvars`
-  - Path to `tfvars` file
-
 - `TERRAFORM_SOURCES ?= $(HOME)/git/ztrack-consumers/provisioning/terraform`
-  - Path to `tf` file(s), mounted as writable under `./<VERSION_FOLDER>/tfsrc`
+  - Path to local `tf` file(s), mounted as writable under `./<VERSION_FOLDER>/tfsrc`
+
+- `TFVARS_FILE ?= staging.tfvars`
+  - Path to `tfvars` file, most likely mounted in the container under `tfsrc`
 
 - `ADD_VOLUMES ?= -v $(HOME)/.aws:/root/.aws`
   - Additional local:container volumes to be mounted. Additional volumes can be appended e.g. ` -v foo:bar`

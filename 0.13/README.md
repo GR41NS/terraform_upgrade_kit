@@ -28,7 +28,7 @@
     ```
 
 2. Run `make` to start the container.
-3. Once inside the container, run `TFVARS_FILE=<FILENAME> make init`. You should see the message below. If there are errors, you'll have to fix `em :P
+3. Once inside the container, run `make init` (pass in any required [configuration parameters](../README.md#configuration-parameters-and-defaults)). You should see the message below. If there are errors, you'll have to fix `em :P
 
     ```
     d4b81dfde410:/app/0.13# TFVARS_FILE=staging.tfvars make init
@@ -46,4 +46,4 @@
     commands will detect it and remind you to do so if necessary.
     ```
 
-4. TODO
+4. Fix any warnings or errors until you get a clean `init`
