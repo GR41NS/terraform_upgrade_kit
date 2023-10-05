@@ -10,7 +10,7 @@ export TF_PLUGIN_CACHE_DIR = $(shell git rev-parse --show-toplevel)/.terraform.d
 
 # Configuration Overrides
 REGION      ?= us-west-2
-TFVARS_FILE ?=
+TFVARS_FILE ?= staging.tfvars
 
 # Constants
 TERRAFORM_CMD := cd tfsrc && terraform
@@ -31,8 +31,6 @@ endif
 init: tfenv
 	@echo "initializing terraform"
 	@$(TERRAFORM_CMD) init -backend-config "region=$(REGION)"
-
-
 
 .PHONY: fmt
 fmt:

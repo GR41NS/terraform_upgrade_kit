@@ -2,7 +2,7 @@ ifeq (, $(TF_VERSION))
 $(error "TF_VERSION must be set")
 endif
 
-# Path to your .tf + .tfvars files, mounted as writable under `./tfsrc`
+# Path to your .tf files, mounted as writable under `./tfsrc`
 TERRAFORM_SOURCES ?= $(HOME)/git/ztrack-consumers/provisioning/terraform
 # Additional volumes can be added by appending `-v foo:bar`
 ADD_VOLUMES       ?= -v $(HOME)/.aws:/root/.aws
