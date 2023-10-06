@@ -17,9 +17,11 @@ TERRAFORM_CMD := cd tfsrc && terraform
 TF_CURRENT    := $(shell tfenv version-name)
 
 .PHONY: init
-init: tfenv
+init: clean tfenv
 	@echo "initializing terraform"
-	@$(TERRAFORM_CMD) init -backend-config "region=$(REGION)"
+	@$(TERRAFORM_CMD) init \
+		-backend-config "region=$(REGION)"
+	@$(TERRAFORM_CMD) workspace new $(ENVIRONMENT) 2>/dev/null || terraform workspace select $(ENVIRONMENT)
 
 .PHONY: plan
 plan: init validate
@@ -68,3 +70,7 @@ else
 	@tfenv install $(TF_VERSION)
 	@tfenv use $(TF_VERSION)
 endif
+
+.PHONY: clean
+clean:
+	@rm -rf tfsrc/.terraform/terraform.tfstate tfsrc/terraform.tfstate.d

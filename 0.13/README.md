@@ -68,11 +68,6 @@
     ```
 
 7. Run `ENVIRONMENT=staging make 0.13upgrade`
-
-Run a destroy (done)
-Deploy on 0.11
-Change to using workspace_key_prefix
-init/plan on 0.13
-0.13upgrade on 0.13
-apply
-plan!
+8. Validate changes to your `.tf` files
+9. Run `ENVIRONMENT=staging make plan`
+10. Run `ENVIRONMENT=staging make apply`
