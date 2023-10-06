@@ -1,5 +1,5 @@
-ifeq ($(ENVIRONMENT),)
-$(error ENVRIONMENT must be set, e.g. `ENVIRONMENT=staging make plan`)
+ifeq (, $(ENVIRONMENT))
+$(error ENVRIONMENT must be set, e.g. `ENVIRONMENT=staging make <TARGET>`)
 endif
 
 ifeq (, $(TF_VERSION))
@@ -16,30 +16,10 @@ TFVARS_FILE ?= $(ENVIRONMENT).tfvars
 TERRAFORM_CMD := cd tfsrc && terraform
 TF_CURRENT    := $(shell tfenv version-name)
 
-.PHONY: tfenv
-tfenv:
-	@mkdir -p $(TF_PLUGIN_CACHE_DIR)
-ifeq ($(TF_CURRENT), $(TF_VERSION))
-	@echo "terraform v$(TF_VERSION) ready to roll..."
-else
-	@tfenv install $(TF_VERSION)
-	@tfenv use $(TF_VERSION)
-endif
-
-
 .PHONY: init
 init: tfenv
 	@echo "initializing terraform"
 	@$(TERRAFORM_CMD) init -backend-config "region=$(REGION)"
-
-.PHONY: fmt
-fmt:
-	@$(TERRAFORM_CMD) fmt
-
-
-.PHONY: validate
-	@$(TERRAFORM_CMD) validate
-
 
 .PHONY: plan
 plan: init validate
@@ -49,7 +29,6 @@ ifeq ($(TFVARS_FILE),)
 		-var 'environment=$(ENVIRONMENT)' \
 		-out terraform.plan
 else
-	echo $(TFVARS_FILE)
 	@$(TERRAFORM_CMD) plan \
 		-var 'environment=$(ENVIRONMENT)' \
 		-var-file="$(TFVARS_FILE)" \
@@ -61,7 +40,6 @@ apply: plan
 	@echo "applying plan"
 	@$(TERRAFORM_CMD) apply terraform.plan
 
-
 .PHONY: destroy
 destroy: init
 	@echo "destroying deployment environment/workspace '$(ENVIRONMENT)'"
@@ -72,4 +50,21 @@ else
 	@$(TERRAFORM_CMD) destroy \
 		-var 'environment=$(ENVIRONMENT)' \
 		-var-file="$(TFVARS_FILE)"
+endif
+
+.PHONY: fmt
+fmt:
+	@$(TERRAFORM_CMD) fmt
+
+.PHONY: validate
+	@$(TERRAFORM_CMD) validate
+
+.PHONY: tfenv
+tfenv:
+	@mkdir -p $(TF_PLUGIN_CACHE_DIR)
+ifeq ($(TF_CURRENT), $(TF_VERSION))
+	@echo "terraform v$(TF_VERSION) ready to roll..."
+else
+	@tfenv install $(TF_VERSION)
+	@tfenv use $(TF_VERSION)
 endif

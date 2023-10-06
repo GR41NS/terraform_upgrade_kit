@@ -1,3 +1,4 @@
+ENVIRONMENT ?= staging
 TF_VERSION  := 0.13.7
 
 include $(shell git rev-parse --show-toplevel)/common.docker.mk

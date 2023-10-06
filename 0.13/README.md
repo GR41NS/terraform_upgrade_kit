@@ -1,6 +1,7 @@
 ## ~ 0.11 -> 0.13
 
-1. Update your main `.tf`:
+1. First, run `terraform plan` for your project + environment, and verify there are no pending changes. A clean plan will remove additional unknowns during the upgrade process.
+2. Update your main `.tf`:
 
     ```php
     terraform {
@@ -27,11 +28,11 @@
     }
     ```
 
-2. Run `make` to start the container.
-3. Once inside the container, run `make init` (pass in any required [configuration parameters](../README.md#configuration-parameters-and-defaults)). You should see the message below. If there are errors, you'll have to fix `em :P
+3. Run `make` to start the container.
+4. Once inside the container, run `make init` (pass in any required [configuration parameters](../README.md#configuration-parameters-and-defaults)). You should see the message below. If there are errors, you'll have to fix `em :P
 
-    ```
-    d4b81dfde410:/app/0.13# TFVARS_FILE=staging.tfvars make init
+    ```shell
+    # ENVIRONMENT=staging make init
     
     ...
 
@@ -46,4 +47,32 @@
     commands will detect it and remind you to do so if necessary.
     ```
 
-4. Fix any warnings or errors until you get a clean `init`
+5. Fix any warnings or errors until you get a clean `init`
+6. Run `ENVIRONMENT=staging make plan`, and fix all syntax errors until you you receive a valid plan result:
+
+    ```shell
+    # ENVIRONMENT=staging make plan
+
+    ...
+
+    Plan: 269 to add, 0 to change, 0 to destroy.
+
+    ------------------------------------------------------------------------
+
+    This plan was saved to: terraform.plan
+
+    To perform exactly these actions, run the following command to apply:
+        terraform apply "terraform.plan"
+
+    Releasing state lock. This may take a few moments...
+    ```
+
+7. Run `ENVIRONMENT=staging make 0.13upgrade`
+
+Run a destroy (done)
+Deploy on 0.11
+Change to using workspace_key_prefix
+init/plan on 0.13
+0.13upgrade on 0.13
+apply
+plan!
