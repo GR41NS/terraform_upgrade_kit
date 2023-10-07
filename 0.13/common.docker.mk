@@ -3,7 +3,7 @@ $(error "TF_VERSION must be set")
 endif
 
 # Path to your .tf files, mounted as writable under `./tfsrc`
-TF_SRC_PATH ?= $(HOME)/git/ztrack-consumers/provisioning/terraform
+TF_SRC_PATH ?= $(HOME)/git/foo/bar/provisioning/terraform
 # Additional volumes can be added by appending `-v foo:bar`
 ADD_VOLUMES ?= -v $(HOME)/.aws:/root/.aws
 # In case you need to pass your SSH key to the container...

@@ -1,4 +1,30 @@
-## ~ 0.11 -> 0.13
+# ~ 0.11 -> 0.13
+
+## Configuration
+
+Variables can be passed at runtime, e.g.:
+`REGION=us-west-2 TFVARS_PATH=foo.tfvars make init`
+
+- `ENVIRONMENT ?= staging`
+  - The Terraform `env` value
+
+- `REGION ?= us-west-2`
+  - Cloud region (applicable to AWS, others)
+
+- `TF_SRC_PATH ?= $(HOME)/git/ztrack-consumers/provisioning/terraform`
+  - Path to local `tf` file(s), mounted as writable under `./<VERSION_FOLDER>/tfsrc`
+
+- `TFVARS_PATH ?= staging.tfvars`
+  - Path to `tfvars` file, most likely mounted in the container under `tfsrc`
+
+- `ADD_VOLUMES ?= -v $(HOME)/.aws:/root/.aws`
+  - Additional volumes can be added by appending `-v foo:bar`
+
+- `SSH_KEY ?= $(HOME)/.ssh/id_rsa`
+  - Path to local key used by SSH, if needed (i.e. for cloning private Github repos)
+
+
+## Upgrade Walkthrough
 
 1. First, run `terraform plan` for your project + environment, and verify there are no pending changes. A clean plan will remove additional unknowns during the upgrade process.
 2. Update your main `.tf`:
