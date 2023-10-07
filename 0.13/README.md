@@ -28,11 +28,16 @@
     }
     ```
 
-3. Run `make` to start the container.
+3. Run `make` to start the container, and supply the path to your `.tf` configuration files:
+
+    ```shell
+    TF_SRC_PATH=$HOME/git/ztrack-consumers/provisioning/terraform/s3 make
+    ```
+
 4. Once inside the container, run `make init` (pass in any required [configuration parameters](../README.md#configuration-parameters-and-defaults)). You should see the message below. If there are errors, you'll have to fix `em :P
 
     ```shell
-    # ENVIRONMENT=staging make init
+    make init
     
     ...
 
@@ -48,10 +53,10 @@
     ```
 
 5. Fix any warnings or errors until you get a clean `init`
-6. Run `ENVIRONMENT=staging make plan`, and fix all syntax errors until you you receive a valid plan result:
+6. Run `make plan`, and fix all syntax errors until you you receive a valid plan result:
 
     ```shell
-    # ENVIRONMENT=staging make plan
+    ENVIRONMENT=staging TFVARS_PATH=staging.tfvars make plan
 
     ...
 

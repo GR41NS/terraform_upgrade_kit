@@ -11,14 +11,16 @@ AWS_REGION  ?= us-west-2
 # ADD_VOLUMES="-v $(HOME)/.aws:/root/.aws -v foo:bar"
 ADD_VOLUMES ?= 
 
+# If running locally, mount AWS Credentials + run interactively with TTY
+ifneq ($(CI),true)
+CREDENTIALS_VOLUME ?= -v $(HOME)/.aws:/root/.aws
+IT                 := -it
+endif
+
 #### Dependencies and Globals
 export TF_PLUGIN_CACHE_DIR = $(HOME)/.terraform.d/plugin-cache
 TF_CMD := docker run --rm $(IT) $(CREDENTIALS_VOLUME) -v ${PWD}:/data $(ADD_VOLUMES) -w /data hashicorp/terraform:$(TF_VERSION)
-# If running locally, mount AWS Credentials + run interactively with TTY
-ifneq ($(CI),true)
-CREDENTIALS_VOLUME := -v $(HOME)/.aws:/root/.aws
-IT                 := -it
-endif
+
 
 .PHONY: init
 init: clean

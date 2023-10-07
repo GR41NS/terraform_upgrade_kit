@@ -32,7 +32,7 @@ These variables can be passed in during Terraform execution, e.g.:
 - `REGION ?= us-west-2`
   - Cloud region (applicable to AWS, others)
 
-- `TERRAFORM_SOURCES ?= $(HOME)/git/ztrack-consumers/provisioning/terraform`
+- `TF_SRC_PATH ?= $(HOME)/git/ztrack-consumers/provisioning/terraform`
   - Path to local `tf` file(s), mounted as writable under `./<VERSION_FOLDER>/tfsrc`
 
 - `TFVARS_PATH ?= staging.tfvars`
