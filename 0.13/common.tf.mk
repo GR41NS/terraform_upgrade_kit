@@ -10,7 +10,7 @@ export TF_PLUGIN_CACHE_DIR = $(shell git rev-parse --show-toplevel)/.terraform.d
 
 # Configuration Overrides
 REGION      ?= us-west-2
-TFVARS_FILE ?= $(ENVIRONMENT).tfvars
+TFVARS_PATH ?= $(ENVIRONMENT).tfvars
 
 # Constants
 TERRAFORM_CMD := cd tfsrc && terraform
@@ -26,14 +26,14 @@ init: clean tfenv
 .PHONY: plan
 plan: init validate
 	@echo "creating terraform plan"
-ifeq ($(TFVARS_FILE),)
+ifeq ($(TFVARS_PATH),)
 	@$(TERRAFORM_CMD) plan \
 		-var 'environment=$(ENVIRONMENT)' \
 		-out terraform.plan
 else
 	@$(TERRAFORM_CMD) plan \
 		-var 'environment=$(ENVIRONMENT)' \
-		-var-file="$(TFVARS_FILE)" \
+		-var-file="$(TFVARS_PATH)" \
 		-out terraform.plan
 endif
 
@@ -45,13 +45,13 @@ apply: plan
 .PHONY: destroy
 destroy: init
 	@echo "destroying deployment environment/workspace '$(ENVIRONMENT)'"
-ifeq ($(TFVARS_FILE),)
+ifeq ($(TFVARS_PATH),)
 	@$(TERRAFORM_CMD) destroy \
 		-var 'environment=$(ENVIRONMENT)' \
 else
 	@$(TERRAFORM_CMD) destroy \
 		-var 'environment=$(ENVIRONMENT)' \
-		-var-file="$(TFVARS_FILE)"
+		-var-file="$(TFVARS_PATH)"
 endif
 
 .PHONY: fmt

@@ -3,11 +3,11 @@ $(error "TF_VERSION must be set")
 endif
 
 # Path to your .tf files, mounted as writable under `./tfsrc`
-TERRAFORM_SOURCES ?= $(HOME)/git/ztrack-consumers/provisioning/terraform
+TF_SRC_PATH ?= $(HOME)/git/ztrack-consumers/provisioning/terraform
 # Additional volumes can be added by appending `-v foo:bar`
-ADD_VOLUMES       ?= -v $(HOME)/.aws:/root/.aws
+ADD_VOLUMES ?= -v $(HOME)/.aws:/root/.aws
 # In case you need to pass your SSH key to the container...
-SSH_KEY           ?= $(HOME)/.ssh/id_rsa
+SSH_KEY     ?= $(HOME)/.ssh/id_rsa
 
 # Constants
 DOCKER_BUILD_PATH := ../
@@ -27,7 +27,7 @@ run: build
 		-it \
 		--rm \
 		-v $(REPO_ROOT):/app \
-		-v $(TERRAFORM_SOURCES):/app/$(CURR_DIR)/tfsrc \
+		-v $(TF_SRC_PATH):/app/$(CURR_DIR)/tfsrc \
 		$(ADD_VOLUMES) \
 		$(DOCKER_IMAGE)
 

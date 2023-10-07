@@ -18,13 +18,13 @@ So, follow along below to get your Terraform states updated, major version by ma
 
 ## Repo Structure
 
-- `/`       - Common scripts used to build and run various Terraform versions within a Docker container
-- `/0.13/`  - Fixtures and scripts for `0.11.X` -> `0.13.8` upgrade
+- [`0.13/`](0.13/)   - Fixtures and scripts for `0.11.X` -> `0.13.8` upgrade
+- [`1.5.7/`](1.5.7/) - Containerized Terraform drop-in scripts for pinning versions (can also be used with DinD for CI/CD scenarios)
 
 ## Configuration Parameters and Defaults
 
 These variables can be passed in during Terraform execution, e.g.:
-`REGION=us-west-2 TFVARS_FILE=foo.tfvars make init`
+`REGION=us-west-2 TFVARS_PATH=foo.tfvars make init`
 
 - `ENVIRONMENT ?= staging`
   - The Terraform `env` value
@@ -35,7 +35,7 @@ These variables can be passed in during Terraform execution, e.g.:
 - `TERRAFORM_SOURCES ?= $(HOME)/git/ztrack-consumers/provisioning/terraform`
   - Path to local `tf` file(s), mounted as writable under `./<VERSION_FOLDER>/tfsrc`
 
-- `TFVARS_FILE ?= staging.tfvars`
+- `TFVARS_PATH ?= staging.tfvars`
   - Path to `tfvars` file, most likely mounted in the container under `tfsrc`
 
 - `ADD_VOLUMES ?= -v $(HOME)/.aws:/root/.aws`
